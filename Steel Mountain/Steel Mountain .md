@@ -1,6 +1,6 @@
 # Steel Mountain - TryHackMe - Farouk Abbas
 
-![room_done.png](Steel%20Mountain%20-%20TryHackMe%20-%20Farouk%20Abbas/11.png)
+![11.png](Steel%20Mountain%20-%20TryHackMe%20-%20Farouk%20Abbas/11.png)
 
 # Intro
 
