@@ -1,6 +1,6 @@
 # Steel Mountain
 
-![room_done.png](Steel%20Mountain/room_done.png)
+![room_done.png](room_done.png)
 
 # Intro
 
