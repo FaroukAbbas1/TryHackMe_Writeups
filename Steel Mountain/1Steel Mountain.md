@@ -1,6 +1,6 @@
 # Steel Mountain - TryHackMe - Farouk Abbas
 
-![room_done.png](Steel%20Mountain%20-%20TryHackMe%20-%20Farouk%20Abbas/room_done.png)
+![11.png](Steel%20Mountain%20-%20TryHackMe%20-%20Farouk%20Abbas/11.png)
 
 # Intro
 
@@ -50,7 +50,7 @@ PORT      STATE SERVICE       VERSION
 
 **2- main page**
 
-![port80_1.png](Steel%20Mountain%20-%20TryHackMe%20-%20Farouk%20Abbas/port80_1.png)
+![port80_1.png](Steel%20Mountain%20-%20TryHackMe%20-%20Farouk%20Abbas/6.png)
 
 First question: Who is the employee of the month?
 
@@ -60,13 +60,13 @@ step 2: lets download the image and analyze it maybe contains anything reveals t
 
 before i analyze anything i noticed the name of the image and it reveals the answer.
 
-![port80_2.png](Steel%20Mountain%20-%20TryHackMe%20-%20Farouk%20Abbas/port80_2.png)
+![port80_2.png](Steel%20Mountain%20-%20TryHackMe%20-%20Farouk%20Abbas/7.png)
 
 ## PORT 445 SMB
 
 SMB seems to be secure but the only thing can be documented that there is no rate limiting so anyone can brute force the username and password
 
-![port445_1.png](Steel%20Mountain%20-%20TryHackMe%20-%20Farouk%20Abbas/port445_1.png)
+![port445_1.png](Steel%20Mountain%20-%20TryHackMe%20-%20Farouk%20Abbas/8.png)
 
 ## PORT 3389 RDP
 
@@ -85,7 +85,7 @@ and there is no rate limiting + connecting to the target via rdp reveals the ver
 
 **Windows 8.1 or Windows Server 2012 R2 Build 9600**
 
-![port3389_1.png](Steel%20Mountain%20-%20TryHackMe%20-%20Farouk%20Abbas/port3389_1.png)
+![port3389_1.png](Steel%20Mountain%20-%20TryHackMe%20-%20Farouk%20Abbas/9.png)
 
 ## Port 5985 **WinRM HTTP**
 
