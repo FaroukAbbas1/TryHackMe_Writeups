@@ -117,7 +117,7 @@ This is totally vulnerable to **CVE-2014-6287 has a critical RCE**
 
 # Post-Exploitation
 
-### Local Enumeration
+## Local Enumeration
 
 **Step1: We need to transfer the WinPeas tool so we can enumerate the machine** 
 
