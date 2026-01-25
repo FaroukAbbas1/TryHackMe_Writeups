@@ -1,4 +1,4 @@
-# Reset_Writeup
+# Reset
 
 This Room Is About Active Directory Compromising Abusing ASREP-Roasting, ACLs, Delegations.
 
